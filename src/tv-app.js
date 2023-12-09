@@ -2,6 +2,10 @@
 import { LitElement, html, css } from 'lit';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
+import "@lrnwebcomponents/simple-icon/lib/simple-icon-button-lite.js";
+import "@lrnwebcomponents/simple-icon/lib/simple-icon-lite.js";
+import "@lrnwebcomponents/simple-icon/lib/simple-icons.js";
+import "@lrnwebcomponents/hax-iconset/lib/simple-hax-iconset.js";
 import "./tv-channel.js";
 
 export class TvApp extends LitElement {
