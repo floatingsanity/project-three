@@ -7,6 +7,7 @@ import "@lrnwebcomponents/simple-icon/lib/simple-icon-lite.js";
 import "@lrnwebcomponents/simple-icon/lib/simple-icons.js";
 import "@lrnwebcomponents/hax-iconset/lib/simple-hax-iconset.js";
 import "./tv-channel.js";
+import "@lrnwebcomponents/video-player/video-player.js";
 
 export class TvApp extends LitElement {
   // defaults
@@ -43,6 +44,18 @@ export class TvApp extends LitElement {
         margin: 16px;
         padding: 16px;
       }
+      .video-container {
+        padding :20px ;
+        width: 880px; 
+        height: 670px; 
+        overflow: hidden; 
+      }
+      sl-button {
+        margin-right: 70px;
+        padding: 20px;
+        width:40%; 
+        height:340px;
+      }
       `
     ];
   }
@@ -64,12 +77,18 @@ export class TvApp extends LitElement {
           `
         )
       }
+      
+      <div class="video-container">
       <div>
       ${this.activeItem.name}
       ${this.activeItem.description}
         <!-- video -->
-        <!-- discord / chat - optional -->
+        <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="orange">
+        </video-player>
       </div>
+        <!-- buttons -->
+        <sl-button variant="neutral" outline>Previous</sl-button>
+        <sl-button variant="neutral" outline>Next</sl-button>
       <!-- dialog -->
       <sl-dialog label="Dialog" class="dialog">
       ${this.activeItem.title}
