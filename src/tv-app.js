@@ -50,25 +50,32 @@ export class TvApp extends LitElement {
 }
       .listings {
     width: 20%; 
+    overflow-y: auto;
+    max-height: 900px;
+    background-color: #676767;
+    padding: 10px; 
 }
       .video-container {
-        width: 70%;
+        width: 60%;
         overflow: hidden; 
       }
-      sl-button {
-        margin-right: 70px;
-        border: 1px solid #676767;
-        width:40%; 
-      }
+        sl-button {
+          margin-right: 40px;
+          border: 2px solid #676767;
+          border-radius: 10px;
+          width:45%; 
+        }
+
       .information {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 90%;
+        width: 99%;
         height: 250px;
         font-size: 16px;
         background-color: #FFC0CB;
         border: 2px solid #676767;
+        border-radius: 10px;
         white-space: pre-line;
         margin-top: 20px;
 
@@ -83,7 +90,7 @@ export class TvApp extends LitElement {
         <div class="video-container">
           <div>
             <!-- video -->
-            <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="orange">
+            <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="pink">
             </video-player>
           </div>
           <!-- buttons -->
