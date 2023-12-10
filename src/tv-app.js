@@ -1,4 +1,4 @@
-// import stuff
+ // import stuff
 import { LitElement, html, css } from 'lit';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
@@ -40,60 +40,90 @@ export class TvApp extends LitElement {
     return [
       css`
       :host {
-        display: block;
+        display:block;
         margin: 16px;
         padding: 16px;
       }
+      .container {
+  display: flex;
+  justify-content: space-between;
+}
+      .listings {
+    width: 20%; 
+}
       .video-container {
-        padding :20px ;
-        width: 880px; 
-        height: 670px; 
+        width: 70%;
         overflow: hidden; 
       }
       sl-button {
         margin-right: 70px;
         padding: 20px;
         width:40%; 
-        height:340px;
       }
+      .information {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        height: 250px;
+        font-size: 16px;
+        background-color: #FFC0CB;
+        border: 1px solid #676767;
+        white-space: pre-line;
+
+        }
       `
     ];
   }
   // LitElement rendering template of your element
   render() {
     return html`
-      <h2>${this.name}</h2>
-      ${
-        this.listings.map(
-          (item) => html`
-            <tv-channel
-              id="${item.id}"
-              title="${item.title}"
-              presenter="${item.metadata.author}"
-              description="${item.description}"
-              @click="${this.itemClick}"
-            >
-            </tv-channel>
-          `
-        )
-      }
-      
-      <div class="video-container">
-      <div>
-      ${this.activeItem.name}
-      ${this.activeItem.description}
-        <!-- video -->
-        <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="orange">
-        </video-player>
+      <div class="container">
+        <div class="video-container">
+          <div>
+            <!-- video -->
+            <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="orange">
+            </video-player>
+          </div>
+          <!-- buttons -->
+          <sl-button variant="neutral" outline>Previous</sl-button>
+          <sl-button variant="neutral" outline>Next</sl-button>
+          <div class="information">
+          ${this.activeItem.title}
+            ${this.activeItem.description}
+          </div>
+          <!-- dialog -->
+          <sl-dialog label="Dialog" class="dialog">
+            ${this.activeItem.title}
+            <sl-button slot="footer" variant="primary" @click="${this.closeDialog}">Close</sl-button>
+          </sl-dialog>
+        </div>
+        <div class="listings">
+          ${
+            this.listings.map(
+              (item) => html`
+                <tv-channel
+                  id="${item.id}"
+                  title="${item.title}"
+                  presenter="${item.metadata.author}"
+                  description="${item.description}"
+                  @click="${this.itemClick}"
+                >
+                </tv-channel>
+              `
+            )
+          }
+        </div>
       </div>
-        <!-- buttons -->
-        <sl-button variant="neutral" outline>Previous</sl-button>
-        <sl-button variant="neutral" outline>Next</sl-button>
-      <!-- dialog -->
-      <sl-dialog label="Dialog" class="dialog">
+  
+    <!-- dialog -->
+    <sl-dialog label="Dialog" class="dialog">
       ${this.activeItem.title}
-        <sl-button slot="footer" variant="primary" @click="${this.closeDialog}">Close</sl-button>
-      </sl-dialog>
+      <sl-button slot="footer" variant="primary" @click="${this.closeDialog}">Close</sl-button>
+    </sl-dialog>
+  </div>
+</div>
+
     `;
   }
 

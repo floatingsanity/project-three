@@ -21,29 +21,37 @@ export class TvChannel extends LitElement {
     return {
       title: { type: String },
       presenter: { type: String },
+      description: {type: String},
     };
   }
   // LitElement convention for applying styles JUST to our element
   static get styles() {
     return css`
       :host {
-        display: inline-flex;
+      display:flex;
+      flex-direction: column;
+      
       }
       .wrapper {
-        padding: 16px;
-        background-color: #FFC0CB;
-        border: 1px solid #676767; 
-      }
+      padding: 60px;
+      background-color: #FFC0CB;
+      border: 1px solid #676767;
+      margin-bottom: 16px;
+}
+
     `;
   }
   // LitElement rendering template of your element
   render() {
     return html`
+       <div>
       <div class="wrapper">
         <h3>${this.title}</h3>
-        <h4>${this.presenter}</h4>
+        <h6>${this.presenter}</h6>
+        <h6>${this.description}</h6>
         <slot></slot>
-      </div>  
+      </div> 
+    </div>  
       `;
   }
 }
