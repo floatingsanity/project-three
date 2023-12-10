@@ -57,7 +57,7 @@ export class TvApp extends LitElement {
       }
       sl-button {
         margin-right: 70px;
-        padding: 20px;
+        border: 1px solid #676767;
         width:40%; 
       }
       .information {
@@ -68,8 +68,9 @@ export class TvApp extends LitElement {
         height: 250px;
         font-size: 16px;
         background-color: #FFC0CB;
-        border: 1px solid #676767;
+        border: 2px solid #676767;
         white-space: pre-line;
+        margin-top: 20px;
 
         }
       `
@@ -86,8 +87,8 @@ export class TvApp extends LitElement {
             </video-player>
           </div>
           <!-- buttons -->
-          <sl-button variant="neutral" outline>Previous</sl-button>
-          <sl-button variant="neutral" outline>Next</sl-button>
+          <sl-button variant="neutral" outline @click="${() => this.showPrevious(this.activeItem)}">Previous</sl-button>
+          <sl-button variant="neutral" outline @click="${() => this.showNext(this.activeItem)}">Next</sl-button>
           <div class="information">
           ${this.activeItem.title}
             ${this.activeItem.description}
@@ -133,12 +134,19 @@ export class TvApp extends LitElement {
   }
 
   itemClick(e) {
-    console.log(e.target);
+    const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
+    if (previouslyClickedItem) {
+      previouslyClickedItem.classList.remove('clicked');
+    }
+  
+    e.target.classList.add('clicked');
+  
     this.activeItem = {
       title: e.target.title,
       id: e.target.id,
       description: e.target.description,
     };
+  
     const dialog = this.shadowRoot.querySelector('.dialog');
     dialog.show();
   }
@@ -153,6 +161,18 @@ export class TvApp extends LitElement {
         this.updateSourceData(this[propName]);
       }
     });
+  }
+  
+  showNext() {
+    const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
+    const nextIndex = (currentIndex + 1) % this.listings.length;
+    this.activeItem = this.listings[nextIndex];
+  }
+  
+  showPrevious() {
+    const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
+    const previousIndex = (currentIndex - 1 + this.listings.length) % this.listings.length;
+    this.activeItem = this.listings[previousIndex];
   }
 
   async updateSourceData(source) {
