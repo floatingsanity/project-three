@@ -52,7 +52,7 @@ export class TvApp extends LitElement {
     width: 20%; 
     overflow-y: auto;
     max-height: 900px;
-    border-radius: 10px;
+    border-radius: 10 px;
     background-color: #676767;
     border: 4px solid #000;
     padding: 30px; 
@@ -161,8 +161,8 @@ export class TvApp extends LitElement {
       description: e.target.description,
     };
   
-    const dialog = this.shadowRoot.querySelector('.dialog');
-    dialog.show();
+    // const dialog = this.shadowRoot.querySelector('.dialog');
+    // dialog.show();
   }
 
   // LitElement life cycle for when any property changes
