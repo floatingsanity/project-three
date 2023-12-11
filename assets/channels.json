@@ -12,8 +12,8 @@
         "id": "item-1",
         "order": 1,
         "parent": null,
-        "title": "Intro",
-        "description": "Introduction",
+        "title": "Introduction",
+        "description": "Introduction To The Cycle of Procrastnation",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
           "timecode": 0
@@ -22,100 +22,88 @@
       {
         "id": "item-2",
         "order": 2,
-        "title": "SECTION2",
-        "description": "Cycle of procrastnation",
+        "title": "What Is procrastnation?",
+        "description": "What?",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 0.43
         }
       },
       {
         "id": "item-3",
         "indent": 0,
         "order": 3,
-        "title": "SECTION3",
-        "description": "Cycle of procrastnation",
+        "title": "why do people procrastnate? ",
+        "description": "Why",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 1.11
         }
       }
       ,
       {
         "id": "item-4",
         "order": 4,
-        "title": "SECTION4",
+        "title": "Scientific Explnation",
         "description": "Cycle of procrastnation",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 1.32
         }
       }
       ,
       {
         "id": "item-5",
         "order": 5,
-        "title": "SECTION5",
-        "description": "Cycle of procrastnation",
+        "title": "Responses",
+        "description": "Why do you response with avoiding",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 1.54
         }
       }
       ,
       {
         "id": "item-6",
         "order": 6,
-        "title": "SECTION6",
-        "description": "Cycle of procrastnation",
+        "title": "Studies and Experiments",
+        "description": "Studies proved that your perception gets distordered and become more stressful",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 2.20
         }
       }
       ,
       {
         "id": "item-7",
         "order": 7,
-        "title": "SECTION7",
-        "description": "Cycle of procrastnation",
+        "title": "Emotional regulation and laziness",
+        "description": "You're not lazy, you're just stressed  ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode":2.55
         }
       }
       ,
       {
         "id": "item-8",
         "order": 8,
-        "title": "SECTION8",
-        "description": "Cycle of procrastnation",
+        "title": "Breaking The Cycle",
+        "description": "Stratgies",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 4.19
         }
       }
       ,
       {
         "id": "item-9",
         "order": 9,
-        "title": "SECTION9",
-        "description": "Cycle of procrastnation",
+        "title": "Summary",
+        "description": "Summary",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
-        }
-      }
-      ,
-      {
-        "id": "item-10",
-        "indent": 0,
-        "order": 10,
-        "title": "SECTION10",
-        "description": "Cycle of procrastnation",
-        "metadata": {
-          "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.50
+          "timecode": 5.18
         }
       }
     ]
