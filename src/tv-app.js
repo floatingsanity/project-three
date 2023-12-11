@@ -54,12 +54,14 @@ export class TvApp extends LitElement {
     max-height: 900px;
     border-radius: 10px;
     background-color: #676767;
-    padding: 10px; 
+    border: 4px solid #000;
+    padding: 30px; 
 }
       .video-container {
         width: 60%;
         overflow: hidden; 
         background-color: #676767;
+        border: 4px solid #000;
         padding: 30px; 
         border-radius: 30px;
       }
