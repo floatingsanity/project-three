@@ -52,17 +52,22 @@ export class TvApp extends LitElement {
     width: 20%; 
     overflow-y: auto;
     max-height: 900px;
+    border-radius: 10px;
     background-color: #676767;
     padding: 10px; 
 }
       .video-container {
         width: 60%;
         overflow: hidden; 
+        background-color: #676767;
+        padding: 30px; 
+        border-radius: 30px;
       }
         sl-button {
           margin-right: 40px;
-          border: 2px solid #676767;
+          border: 2px solid #000;
           border-radius: 10px;
+          background-color: #FFC0CB;
           width:45%; 
         }
 
@@ -74,8 +79,8 @@ export class TvApp extends LitElement {
         height: 250px;
         font-size: 16px;
         background-color: #FFC0CB;
-        border: 2px solid #676767;
-        border-radius: 10px;
+        border: 2px solid #000;
+        border-radius: 30px;
         white-space: pre-line;
         margin-top: 20px;
 
@@ -90,7 +95,7 @@ export class TvApp extends LitElement {
         <div class="video-container">
           <div>
             <!-- video -->
-            <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="pink">
+            <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="pink" >
             </video-player>
           </div>
           <!-- buttons -->
