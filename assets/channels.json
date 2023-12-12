@@ -2,10 +2,10 @@
   "status": 200,
   "data": {
     "id": "123-123-123-123",
-    "title": "EdTechJokerTV",
-    "author": "EdTechJoker",
-    "description": "A series of talks to learn about JSON and web standard communications",
-    "license": "by-Feda",
+    "title": "",
+    "author": "",
+    "description": "",
+    "license": "",
     "metadata": {},
     "items": [
       {
@@ -26,7 +26,7 @@
         "description": "What?",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 0.43
+          "timecode": 43
         }
       },
       {
@@ -37,7 +37,7 @@
         "description": "Why",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 1.11
+          "timecode": 71
         }
       }
       ,
@@ -48,7 +48,7 @@
         "description": "Cycle of procrastnation",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 1.32
+          "timecode": 92
         }
       }
       ,
@@ -59,7 +59,7 @@
         "description": "Why do you response with avoiding",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 1.54
+          "timecode": 114
         }
       }
       ,
@@ -70,7 +70,7 @@
         "description": "Studies proved that your perception gets distordered and become more stressful",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 2.20
+          "timecode": 140
         }
       }
       ,
@@ -81,7 +81,7 @@
         "description": "You're not lazy, you're just stressed  ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode":2.55
+          "timecode":175
         }
       }
       ,
@@ -92,7 +92,7 @@
         "description": "Stratgies",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 4.19
+          "timecode": 259 
         }
       }
       ,
@@ -103,7 +103,7 @@
         "description": "Summary",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=FWTNMzK9vG4&t=35s",
-          "timecode": 5.18
+          "timecode": 318
         }
       }
     ]

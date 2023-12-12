@@ -20,6 +20,7 @@ export class TvApp extends LitElement {
       title: null,
       id: null,
       description: null,
+      metadata: {},
     };
   }
   // convention I enjoy using to define the tag's name
@@ -32,6 +33,7 @@ export class TvApp extends LitElement {
       name: { type: String },
       source: { type: String },
       listings: { type: Array },
+      timecode: { type: Number },
       activeItem: { type: Object }
     };
   }
@@ -43,6 +45,7 @@ export class TvApp extends LitElement {
         display:block;
         margin: 16px;
         padding: 16px;
+        align-items: center;
       }
       .container {
   display: flex;
@@ -87,6 +90,18 @@ export class TvApp extends LitElement {
         margin-top: 20px;
 
         }
+        tv-channel.clicked {
+        border: 4px solid #E0115F;
+        padding: 20px;
+        box-sizing: border-box; 
+        border-radius: 30px;
+      }
+
+      tv-channel:hover {
+        cursor: pointer;
+        color: #FFFFFF;
+
+      }
       `
     ];
   }
@@ -159,8 +174,10 @@ export class TvApp extends LitElement {
       title: e.target.title,
       id: e.target.id,
       description: e.target.description,
+      metadata: e.target.metadata, 
     };
   
+    this.updateVideoPlayer();
     // const dialog = this.shadowRoot.querySelector('.dialog');
     // dialog.show();
   }
@@ -181,22 +198,44 @@ export class TvApp extends LitElement {
     const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
     const nextIndex = (currentIndex + 1) % this.listings.length;
     this.activeItem = this.listings[nextIndex];
+    this.updateVideoPlayer();
   }
   
   showPrevious() {
     const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
     const previousIndex = (currentIndex - 1 + this.listings.length) % this.listings.length;
-    this.activeItem = this.listings[previousIndex];
+    if (currentIndex === 0) {
+      const lastItemIndex = this.listings.length - 1;
+      this.activeItem = this.listings[lastItemIndex];
+    } else {
+      this.activeItem = this.listings[previousIndex];
+    }
+    this.updateVideoPlayer();
   }
 
-  async updateSourceData(source) {
-    await fetch(source).then((resp) => resp.ok ? resp.json() : []).then((responseData) => {
-      if (responseData.status === 200 && responseData.data.items && responseData.data.items.length > 0) {
-        this.listings = [...responseData.data.items];
-        console.log(this.listings);
-      }
-    });
+  updateVideoPlayer() {
+    const videoPlayer = this.shadowRoot.querySelector('video-player').shadowRoot.querySelector('a11y-media-player');
+
+    // Set the video source based on the active item's metadata
+    videoPlayer.source = this.activeItem.metadata.source;
+
+    // Play the video
+    videoPlayer.play();
+
+    // Seek to a specific time (e.g., the time specified in metadata)
+    videoPlayer.seek(this.activeItem.metadata.timecode);
   }
-}
+  
+  
+
+    async updateSourceData(source) {
+      await fetch(source).then((resp) => resp.ok ? resp.json() : []).then((responseData) => {
+        if (responseData.status === 200 && responseData.data.items && responseData.data.items.length > 0) {
+          this.listings = [...responseData.data.items];
+          console.log(this.listings);
+        }
+      });
+    }
+  }
 // tell the browser about our tag and class it should run when it sees it
 customElements.define(TvApp.tag, TvApp);
