@@ -11,6 +11,7 @@ export class TvChannel extends LitElement {
     super();
     this.title = '';
     this.presenter = '';
+    this.metadata ={} ;
   }
   // convention I enjoy using to define the tag's name
   static get tag() {
@@ -22,6 +23,8 @@ export class TvChannel extends LitElement {
       title: { type: String },
       presenter: { type: String },
       description: {type: String},
+      timecode: { type: Number },
+      // timerange: { type: Array }, // Added timerange property
     };
   }
   // LitElement convention for applying styles JUST to our element

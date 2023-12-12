@@ -138,6 +138,7 @@ export class TvApp extends LitElement {
                   presenter="${item.metadata.author}"
                   description="${item.description}"
                   @click="${this.itemClick}"
+                  class="${this.activeItem.id === item.id ? 'clicked' : ''}"
                 >
                 </tv-channel>
               `
@@ -174,13 +175,12 @@ export class TvApp extends LitElement {
       title: e.target.title,
       id: e.target.id,
       description: e.target.description,
-      metadata: e.target.metadata, 
+      metadata: e.target.metadata,
     };
   
     this.updateVideoPlayer();
-    // const dialog = this.shadowRoot.querySelector('.dialog');
-    // dialog.show();
   }
+  
 
   // LitElement life cycle for when any property changes
   updated(changedProperties) {
@@ -204,27 +204,65 @@ export class TvApp extends LitElement {
   showPrevious() {
     const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
     const previousIndex = (currentIndex - 1 + this.listings.length) % this.listings.length;
-    if (currentIndex === 0) {
-      const lastItemIndex = this.listings.length - 1;
-      this.activeItem = this.listings[lastItemIndex];
-    } else {
-      this.activeItem = this.listings[previousIndex];
-    }
+    this.activeItem = this.listings[previousIndex];
     this.updateVideoPlayer();
+    
   }
 
   updateVideoPlayer() {
-    const videoPlayer = this.shadowRoot.querySelector('video-player').shadowRoot.querySelector('a11y-media-player');
-
-    // Set the video source based on the active item's metadata
-    videoPlayer.source = this.activeItem.metadata.source;
-
-    // Play the video
-    videoPlayer.play();
-
-    // Seek to a specific time (e.g., the time specified in metadata)
-    videoPlayer.seek(this.activeItem.metadata.timecode);
+    const videoPlayer = this.shadowRoot.querySelector('video-player');
+    if (videoPlayer) {
+      const a11yMediaPlayer = videoPlayer.shadowRoot.querySelector('a11y-media-player');
+  
+      if (a11yMediaPlayer) {
+        // Set the video source based on the active item's metadata
+        a11yMediaPlayer.source = this.activeItem.metadata.source;
+  
+        // Play the video
+        a11yMediaPlayer.play();
+  
+        // Seek to a specific time (e.g., the time specified in metadata)
+        a11yMediaPlayer.seek(this.activeItem.metadata.timecode);
+      }
+    }
   }
+
+  updateActiveItem(index) {
+    const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
+    if (previouslyClickedItem) {
+      previouslyClickedItem.classList.remove('clicked');
+    }
+
+    const newActiveItem = this.listings[index];
+    const newActiveItemElement = this.shadowRoot.querySelector(`[id="${newActiveItem.id}"]`);
+    
+    if (newActiveItemElement) {
+      newActiveItemElement.classList.add('clicked');
+    }
+
+    this.activeItem = newActiveItem;
+    this.updateVideoPlayer();
+  }
+  
+  connectedCallback() {
+    super.connectedCallback();
+    const videoPlayer = this.shadowRoot.querySelector('video-player');
+    if (videoPlayer) {
+      videoPlayer.addEventListener('timeupdate', this.handleVideoTimeUpdate.bind(this));
+    }
+  }
+  
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    const videoPlayer = this.shadowRoot.querySelector('video-player');
+    if (videoPlayer) {
+      videoPlayer.removeEventListener('timeupdate', this.handleVideoTimeUpdate.bind(this));
+    }
+  }
+  
+  
+ 
+
   
   
 
