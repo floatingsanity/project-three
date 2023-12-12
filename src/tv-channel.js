@@ -23,6 +23,7 @@ export class TvChannel extends LitElement {
       title: { type: String },
       presenter: { type: String },
       description: {type: String},
+      image: { type: String },
       timecode: { type: Number },
       // timerange: { type: Array }, // Added timerange property
     };
@@ -36,13 +37,21 @@ export class TvChannel extends LitElement {
       
       }
       .wrapper {
+        width: auto;
       padding: 40px;
       background-color: #FFC0CB;
       margin-top: 16px;
       margin-bottom: 16px;
       border-radius: 30px; 
       border: 4px solid transparent;
+      word-wrap: break-word;
 }
+img {
+      max-width: 40%; 
+      max-height: 40%; 
+      display: block; 
+      margin: auto; 
+    }
 
     `;
   }
@@ -54,6 +63,7 @@ export class TvChannel extends LitElement {
         <h3>${this.title}</h3>
         <h6>${this.presenter}</h6>
         <h6>${this.description}</h6>
+        <img src="${this.image}" alt="${this.title}">
         <slot></slot>
       </div> 
     </div>  

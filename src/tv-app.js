@@ -137,6 +137,7 @@ export class TvApp extends LitElement {
                   title="${item.title}"
                   presenter="${item.metadata.author}"
                   description="${item.description}"
+                  image="${item.image}"
                   @click="${this.itemClick}"
                   class="${this.activeItem.id === item.id ? 'clicked' : ''}"
                 >
@@ -248,6 +249,7 @@ export class TvApp extends LitElement {
     this.activeItem = newActiveItem;
     this.updateVideoPlayer();
   }
+  
   
 
     async updateSourceData(source) {
