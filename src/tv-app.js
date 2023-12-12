@@ -119,9 +119,6 @@ export class TvApp extends LitElement {
     videoPlayer.addEventListener('play', playListener);
   }
 
-
-
-
   // LitElement rendering template of your element
   render() {
     return html`
@@ -129,7 +126,9 @@ export class TvApp extends LitElement {
         <div class="video-container">
           <div>
             <!-- video -->
-            <video-player id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="pink" >
+            <video-player 
+            dark track="https://haxtheweb.org/files/HAXshort.vtt"
+            id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="pink" >
             </video-player>
           </div>
           <!-- buttons -->
