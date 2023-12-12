@@ -105,6 +105,23 @@ export class TvApp extends LitElement {
       `
     ];
   }
+  firstUpdated() {
+    super.firstUpdated();
+    const videoPlayer = this.shadowRoot.querySelector('#video1');
+    const playListener = () => {
+      const firstItem = this.shadowRoot.querySelector('.listings tv-channel:first-child');
+      if (firstItem) {
+        firstItem.click();
+      }
+      videoPlayer.removeEventListener('play', playListener);
+    };
+
+    videoPlayer.addEventListener('play', playListener);
+  }
+
+
+
+
   // LitElement rendering template of your element
   render() {
     return html`
@@ -232,6 +249,7 @@ export class TvApp extends LitElement {
       }
     }
   }
+
 
   updateActiveItem(index) {
     const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
