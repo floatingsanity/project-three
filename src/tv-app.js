@@ -171,15 +171,20 @@ export class TvApp extends LitElement {
   
     e.target.classList.add('clicked');
   
+    const clickedItem = this.listings.find((item) => item.id === e.target.id);
+  
     this.activeItem = {
-      title: e.target.title,
-      id: e.target.id,
-      description: e.target.description,
-      metadata: e.target.metadata,
+      title: clickedItem.title,
+      id: clickedItem.id,
+      description: clickedItem.description,
+      metadata: clickedItem.metadata,
     };
+  
+    this.timecode = clickedItem.metadata.timecode; // Update the timecode property
   
     this.updateVideoPlayer();
   }
+  
   
 
   // LitElement life cycle for when any property changes
@@ -243,27 +248,6 @@ export class TvApp extends LitElement {
     this.activeItem = newActiveItem;
     this.updateVideoPlayer();
   }
-  
-  connectedCallback() {
-    super.connectedCallback();
-    const videoPlayer = this.shadowRoot.querySelector('video-player');
-    if (videoPlayer) {
-      videoPlayer.addEventListener('timeupdate', this.handleVideoTimeUpdate.bind(this));
-    }
-  }
-  
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    const videoPlayer = this.shadowRoot.querySelector('video-player');
-    if (videoPlayer) {
-      videoPlayer.removeEventListener('timeupdate', this.handleVideoTimeUpdate.bind(this));
-    }
-  }
-  
-  
- 
-
-  
   
 
     async updateSourceData(source) {
