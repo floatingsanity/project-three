@@ -52,13 +52,14 @@ export class TvApp extends LitElement {
   justify-content: space-between;
 }
       .listings {
-    width: 20%; 
+    width: 25%; 
     overflow-y: auto;
     max-height: 900px;
     border-radius: 10 px;
     background-color: #676767;
     border: 4px solid #000;
     padding: 30px; 
+    margin-left: 5%;
 }
       .video-container {
         width: 60%;
