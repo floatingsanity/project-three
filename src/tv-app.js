@@ -1,4 +1,4 @@
- // import stuff
+// import stuff
 import { LitElement, html, css } from 'lit';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
@@ -22,6 +22,9 @@ export class TvApp extends LitElement {
       description: null,
       metadata: {},
     };
+    this.transitionInProgress = false;
+    this.clickTimeout = null;
+    this.addEventListener('timeupdate', this.handleVideoTimeUpdate.bind(this));
   }
   // convention I enjoy using to define the tag's name
   static get tag() {
@@ -169,9 +172,7 @@ export class TvApp extends LitElement {
     const dialog = this.shadowRoot.querySelector('.dialog');
     dialog.hide();
   }
-  handleVideoTimeUpdate() {
-    this.updateActiveItemByTime();
-  }
+  
 
   itemClick(e) {
     const clickedItem = this.listings.find(item => item.id === e.target.id);
@@ -180,9 +181,40 @@ export class TvApp extends LitElement {
       this.updateActiveItem(clickedItem);
     }
   }
-  
 
-   seekToCurrentTime() {
+  handleManualItemClick(item) {
+    if (!this.transitionInProgress && !this.buttonActionInProgress) {
+      this.buttonActionInProgress = true;
+      this.transitionInProgress = true;
+
+      this.updateActiveItem(item);
+
+  
+      setTimeout(() => {
+        this.transitionInProgress = false;
+        this.buttonActionInProgress = false;
+      }, 500); 
+    }
+  }
+
+  async showNext() {
+    await this.handleManualItemClick(this.listings[(this.listings.findIndex(item => item.id === this.activeItem.id) + 1) % this.listings.length]);
+  }
+    async showPrevious() {
+    await this.handleManualItemClick(this.listings[(this.listings.findIndex(item => item.id === this.activeItem.id) - 1 + this.listings.length) % this.listings.length]);
+  }
+
+
+  handleTransitionEnd() {
+    this.transitionInProgress = false;
+  }
+  handleVideoTimeUpdate(e) {
+    if (!this.transitionInProgress) {
+      this.updateActiveItemByTime();
+    }
+  }
+  
+  seekToCurrentTime() {
     const videoPlayer = this.shadowRoot.querySelector('video-player');
     if (videoPlayer) {
       const a11yMediaPlayer = videoPlayer.shadowRoot.querySelector('a11y-media-player');
@@ -191,6 +223,53 @@ export class TvApp extends LitElement {
         a11yMediaPlayer.seek(this.activeItem.metadata.timecode, this.activeItem.metadata.end_time);
       }
     }
+  }
+   // LitElement life cycle for when any property changes
+   updated(changedProperties) {
+    if (super.updated) {
+      super.updated(changedProperties);
+    }
+    changedProperties.forEach((oldValue, propName) => {
+      if (propName === "source" && this[propName]) {
+        this.updateSourceData(this[propName]);
+      }
+    });
+  }
+
+  updateVideoPlayer() {
+    const videoPlayer = this.shadowRoot.querySelector('video-player');
+    if (videoPlayer) {
+      const a11yMediaPlayer = videoPlayer.shadowRoot.querySelector('a11y-media-player');
+
+      if (a11yMediaPlayer) {
+        a11yMediaPlayer.source = this.activeItem.metadata.source;
+
+        a11yMediaPlayer.play();
+
+        a11yMediaPlayer.seek(this.activeItem.metadata.timecode, this.activeItem.metadata.end_time);
+      }
+    }
+  }
+  
+  updateActiveItem(newActiveItem) {
+    const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
+    if (previouslyClickedItem) {
+      previouslyClickedItem.classList.remove('clicked');
+    }
+
+    const newActiveItemElement = this.shadowRoot.querySelector(`[id="${newActiveItem.id}"]`);
+    if (newActiveItemElement) {
+      newActiveItemElement.classList.add('clicked');
+    }
+    this.activeItem = {
+      title: newActiveItem.title,
+      id: newActiveItem.id,
+      description: newActiveItem.description,
+      metadata: newActiveItem.metadata,
+    };
+
+    this.timecode = newActiveItem.metadata.timecode; 
+    this.updateVideoPlayer();
   }
   updateActiveItemByTime() {
     const currentTime = this.shadowRoot.querySelector('video-player').shadowRoot.querySelector("a11y-media-player").media.currentTime;
@@ -236,88 +315,6 @@ export class TvApp extends LitElement {
         this.updateVideoPlayer();
       }
     }
-  }
-  
-  
-  
-  firstUpdated() {
-    super.firstUpdated();
-    const videoPlayer = this.shadowRoot.querySelector('#video1');
-    const playListener = () => {
-      const firstItem = this.shadowRoot.querySelector('.listings tv-channel:first-child');
-      if (firstItem) {
-        firstItem.click();
-      }
-      videoPlayer.removeEventListener('play', playListener);
-    };
-
-    videoPlayer.addEventListener('play', playListener);
-    
-  }
-
-  
-  
-
-  // LitElement life cycle for when any property changes
-  updated(changedProperties) {
-    if (super.updated) {
-      super.updated(changedProperties);
-    }
-    changedProperties.forEach((oldValue, propName) => {
-      if (propName === "source" && this[propName]) {
-        this.updateSourceData(this[propName]);
-      }
-    });
-  }
-  
-  showNext() {
-    const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
-    const nextIndex = (currentIndex + 1) % this.listings.length;
-    const nextItem = this.listings[nextIndex];
-    this.updateActiveItem(nextItem);
-  }
-
-  showPrevious() {
-    const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
-    const previousIndex = (currentIndex - 1 + this.listings.length) % this.listings.length;
-    const previousItem = this.listings[previousIndex];
-    this.updateActiveItem(previousItem);
-  }
-
-  updateVideoPlayer() {
-    const videoPlayer = this.shadowRoot.querySelector('video-player');
-    if (videoPlayer) {
-      const a11yMediaPlayer = videoPlayer.shadowRoot.querySelector('a11y-media-player');
-
-      if (a11yMediaPlayer) {
-        a11yMediaPlayer.source = this.activeItem.metadata.source;
-
-        a11yMediaPlayer.play();
-
-        a11yMediaPlayer.seek(this.activeItem.metadata.timecode, this.activeItem.metadata.end_time);
-      }
-    }
-  }
-  
-  updateActiveItem(newActiveItem) {
-    const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
-    if (previouslyClickedItem) {
-      previouslyClickedItem.classList.remove('clicked');
-    }
-
-    const newActiveItemElement = this.shadowRoot.querySelector(`[id="${newActiveItem.id}"]`);
-    if (newActiveItemElement) {
-      newActiveItemElement.classList.add('clicked');
-    }
-    this.activeItem = {
-      title: newActiveItem.title,
-      id: newActiveItem.id,
-      description: newActiveItem.description,
-      metadata: newActiveItem.metadata,
-    };
-
-    this.timecode = newActiveItem.metadata.timecode; 
-    this.updateVideoPlayer();
   }
 
 
