@@ -53,9 +53,9 @@ export class TvApp extends LitElement {
 }
       .listings {
     width: 25%; 
-    overflow-y: auto;
+    overflow-y: auto ;
     max-height: 900px;
-    border-radius: 10 px;
+    border-radius: 10px;
     background-color: #676767;
     border: 4px solid #000;
     padding: 30px; 
@@ -106,20 +106,6 @@ export class TvApp extends LitElement {
       `
     ];
   }
-  firstUpdated() {
-    super.firstUpdated();
-    const videoPlayer = this.shadowRoot.querySelector('#video1');
-    const playListener = () => {
-      const firstItem = this.shadowRoot.querySelector('.listings tv-channel:first-child');
-      if (firstItem) {
-        firstItem.click();
-      }
-      videoPlayer.removeEventListener('play', playListener);
-    };
-
-    videoPlayer.addEventListener('play', playListener);
-  }
-
   // LitElement rendering template of your element
   render() {
     return html`
@@ -128,9 +114,12 @@ export class TvApp extends LitElement {
           <div>
             <!-- video -->
             <video-player 
-            dark track="https://haxtheweb.org/files/HAXshort.vtt"
-            id="video1" source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" accent-color="pink" >
-            </video-player>
+        dark track="https://haxtheweb.org/files/HAXshort.vtt"
+        id="video1" 
+        source="https://youtu.be/FWTNMzK9vG4?si=vEhlWYJyndP-ZZNi" 
+        accent-color="pink" 
+        @timeupdate="${this.handleVideoTimeUpdate}" >
+      </video-player>
           </div>
           <!-- buttons -->
           <sl-button variant="neutral" outline @click="${() => this.showPrevious(this.activeItem)}">Previous</sl-button>
@@ -180,28 +169,92 @@ export class TvApp extends LitElement {
     const dialog = this.shadowRoot.querySelector('.dialog');
     dialog.hide();
   }
+  handleVideoTimeUpdate() {
+    this.updateActiveItemByTime();
+  }
 
   itemClick(e) {
-    const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
-    if (previouslyClickedItem) {
-      previouslyClickedItem.classList.remove('clicked');
+    const clickedItem = this.listings.find(item => item.id === e.target.id);
+
+    if (clickedItem) {
+      this.updateActiveItem(clickedItem);
     }
-  
-    e.target.classList.add('clicked');
-  
-    const clickedItem = this.listings.find((item) => item.id === e.target.id);
-  
-    this.activeItem = {
-      title: clickedItem.title,
-      id: clickedItem.id,
-      description: clickedItem.description,
-      metadata: clickedItem.metadata,
-    };
-  
-    this.timecode = clickedItem.metadata.timecode; // Update the timecode property
-  
-    this.updateVideoPlayer();
   }
+  
+
+   seekToCurrentTime() {
+    const videoPlayer = this.shadowRoot.querySelector('video-player');
+    if (videoPlayer) {
+      const a11yMediaPlayer = videoPlayer.shadowRoot.querySelector('a11y-media-player');
+
+      if (a11yMediaPlayer) {
+        a11yMediaPlayer.seek(this.activeItem.metadata.timecode, this.activeItem.metadata.end_time);
+      }
+    }
+  }
+  updateActiveItemByTime() {
+    const currentTime = this.shadowRoot.querySelector('video-player').shadowRoot.querySelector("a11y-media-player").media.currentTime;
+  
+    const itemId = (
+      (currentTime >= 0 && currentTime < 43 && 'item-1') ||
+      (currentTime >= 43 && currentTime < 71 && 'item-2') ||
+      (currentTime >= 71 && currentTime < 92 && 'item-3') ||
+      (currentTime >= 92 && currentTime < 114 && 'item-4') ||
+      (currentTime >= 114 && currentTime < 140 && 'item-5') ||
+      (currentTime >= 140 && currentTime < 175 && 'item-6') ||
+      (currentTime >= 175 && currentTime < 259 && 'item-7') ||
+      (currentTime >= 259 && currentTime < 318 && 'item-8') ||
+      (currentTime >= 318 && currentTime < 346 && 'item-9')
+    );
+  
+    if (itemId) {
+      if (this.activeItem && itemId === this.activeItem.id) {
+        return; 
+      }
+  
+      const clickedItem = this.listings.find(item => item.id === itemId);
+  
+      if (clickedItem) {
+        const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
+        if (previouslyClickedItem) {
+          previouslyClickedItem.classList.remove('clicked');
+        }
+        const newActiveItemElement = this.shadowRoot.querySelector(`[id="${clickedItem.id}"]`);
+        if (newActiveItemElement) {
+          newActiveItemElement.classList.add('clicked');
+        }
+  
+        this.activeItem = {
+          title: clickedItem.title,
+          id: clickedItem.id,
+          description: clickedItem.description,
+          metadata: clickedItem.metadata,
+        };
+  
+        this.timecode = clickedItem.metadata.timecode; 
+  
+        this.updateVideoPlayer();
+      }
+    }
+  }
+  
+  
+  
+  firstUpdated() {
+    super.firstUpdated();
+    const videoPlayer = this.shadowRoot.querySelector('#video1');
+    const playListener = () => {
+      const firstItem = this.shadowRoot.querySelector('.listings tv-channel:first-child');
+      if (firstItem) {
+        firstItem.click();
+      }
+      videoPlayer.removeEventListener('play', playListener);
+    };
+
+    videoPlayer.addEventListener('play', playListener);
+    
+  }
+
   
   
 
@@ -220,55 +273,53 @@ export class TvApp extends LitElement {
   showNext() {
     const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
     const nextIndex = (currentIndex + 1) % this.listings.length;
-    this.activeItem = this.listings[nextIndex];
-    this.updateVideoPlayer();
+    const nextItem = this.listings[nextIndex];
+    this.updateActiveItem(nextItem);
   }
-  
+
   showPrevious() {
     const currentIndex = this.listings.findIndex(item => item.id === this.activeItem.id);
     const previousIndex = (currentIndex - 1 + this.listings.length) % this.listings.length;
-    this.activeItem = this.listings[previousIndex];
-    this.updateVideoPlayer();
-    
+    const previousItem = this.listings[previousIndex];
+    this.updateActiveItem(previousItem);
   }
 
   updateVideoPlayer() {
     const videoPlayer = this.shadowRoot.querySelector('video-player');
     if (videoPlayer) {
       const a11yMediaPlayer = videoPlayer.shadowRoot.querySelector('a11y-media-player');
-  
+
       if (a11yMediaPlayer) {
-        // Set the video source based on the active item's metadata
         a11yMediaPlayer.source = this.activeItem.metadata.source;
-  
-        // Play the video
+
         a11yMediaPlayer.play();
-  
-        // Seek to a specific time (e.g., the time specified in metadata)
-        a11yMediaPlayer.seek(this.activeItem.metadata.timecode);
+
+        a11yMediaPlayer.seek(this.activeItem.metadata.timecode, this.activeItem.metadata.end_time);
       }
     }
   }
-
-
-  updateActiveItem(index) {
+  
+  updateActiveItem(newActiveItem) {
     const previouslyClickedItem = this.shadowRoot.querySelector('.clicked');
     if (previouslyClickedItem) {
       previouslyClickedItem.classList.remove('clicked');
     }
 
-    const newActiveItem = this.listings[index];
     const newActiveItemElement = this.shadowRoot.querySelector(`[id="${newActiveItem.id}"]`);
-    
     if (newActiveItemElement) {
       newActiveItemElement.classList.add('clicked');
     }
+    this.activeItem = {
+      title: newActiveItem.title,
+      id: newActiveItem.id,
+      description: newActiveItem.description,
+      metadata: newActiveItem.metadata,
+    };
 
-    this.activeItem = newActiveItem;
+    this.timecode = newActiveItem.metadata.timecode; 
     this.updateVideoPlayer();
   }
-  
-  
+
 
     async updateSourceData(source) {
       await fetch(source).then((resp) => resp.ok ? resp.json() : []).then((responseData) => {
